@@ -1,2 +1,2 @@
 # frontend-web-react
-Front-End Web use ReactJS
+Project ini merupakan pengembangan untuk web aplikasi Kanbo
