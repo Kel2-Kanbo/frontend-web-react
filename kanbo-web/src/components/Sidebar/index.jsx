@@ -4,18 +4,29 @@ import { NavLink } from "react-router-dom";
 const Sidebar = () => {
   return (
     <>
-    Berhasil
-      {/* <input type="checkbox" id="sidebar-toggle" />
+
+      <input type="checkbox" id="sidebar-toggle" />
       <div className="sidebar">
         <div className="sidebar-header">
           <h3 className="brand">
-            <span className="brand-title">Explore Banten</span>
+            <span className="brand-title">Kanbo</span>
           </h3>
           <label htmlFor="sidebar-toggle" className="ti-menu-alt"></label>
         </div>
 
         <div className="sidebar-menu">
           <ul>
+            <li>
+              <NavLink
+                to="/kelola-ulasan"
+                className={({ isActive }) =>
+                  isActive ? "side-link active" : "side-link"
+                }
+              >
+                <i className=""></i>
+                <span>Dashboard</span>
+              </NavLink>
+            </li>
             <li>
               <NavLink
                 to="/kelola-wisata"
@@ -25,7 +36,7 @@ const Sidebar = () => {
               >
                 <i className="fa-solid fa-map-location-dot"></i>
 
-                <span>Kelola Wisata</span>
+                <span>My Task</span>
               </NavLink>
             </li>
             <li>
@@ -36,18 +47,7 @@ const Sidebar = () => {
                 }
               >
                 <i className="fa-regular fa-newspaper"></i>
-                <span>Kelola Berita</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/kelola-ulasan"
-                className={({ isActive }) =>
-                  isActive ? "side-link active" : "side-link"
-                }
-              >
-                <i className="fa-solid fa-comment-dots"></i>
-                <span>Kelola Ulasan</span>
+                <span>My Project</span>
               </NavLink>
             </li>
             <li>
@@ -63,7 +63,7 @@ const Sidebar = () => {
             </li>
           </ul>
         </div>
-      </div> */}
+      </div>
     </>
   );
 };
