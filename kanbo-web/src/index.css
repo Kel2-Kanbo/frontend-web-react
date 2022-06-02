@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: rgb(148 163 184);
 }
 
 code {
@@ -15,6 +16,12 @@ code {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* dashboard */
+.dashboard{
+  padding-left: 16rem;
+}
+/* end dashboard */
 
 /* Sidebar */
 

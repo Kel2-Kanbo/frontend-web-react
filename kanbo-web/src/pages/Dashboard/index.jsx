@@ -3,10 +3,12 @@ import Sidebar from '../../components/Sidebar';
 
 function Dashboard() {
   return (
-    <div>
+    <>
         <Sidebar/>
-        ini Dashboard
-    </div>
+
+            <div className='px-4'>ini Dashboard</div>
+        
+    </>
   )
 }
 

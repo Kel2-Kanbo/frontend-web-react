@@ -1,6 +1,8 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
+import { IoAppsSharp } from "react-icons/io5";
+
 const Sidebar = () => {
   return (
     <>
@@ -11,14 +13,14 @@ const Sidebar = () => {
           <h3 className="brand">
             <span className="brand-title">Kanbo</span>
           </h3>
-          <label htmlFor="sidebar-toggle" className="ti-menu-alt"></label>
+          <label htmlFor="sidebar-toggle"><IoAppsSharp/></label>
         </div>
 
         <div className="sidebar-menu">
           <ul>
             <li>
               <NavLink
-                to="/kelola-ulasan"
+                to="/"
                 className={({ isActive }) =>
                   isActive ? "side-link active" : "side-link"
                 }
