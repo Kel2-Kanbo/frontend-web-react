@@ -1,27 +1,13 @@
 import React, { useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import {Link} from "react-router-dom";
-import {gql, useMutation} from "@apollo/client"
-import { v4 as uuidv4 } from "uuid";
+import { Link, useNavigate } from "react-router-dom";
+import Axios from "axios";
 import styled from "@emotion/styled";
 
+import background from "../assets/BgRegisterAdmin.png";
 import Logo from "../assets/Logo.icon";
 import Button from "../Components/Button";
 import InputData from "../Components/InputData";
-
-const insertDataUserByRegister = gql`
-mutation mutationInsertData($email: String!, $name: String!, $password: String!, $username: String!) {
-  insert_user_data(objects: {email: $email, name: $name, password: $password, username: $username}) {
-    returning {
-      email
-      id
-      name
-      password
-      username
-    }
-  }
-}
-`
 
 export default function Register() {
   const [isPaswordShown, setIsPasswordShown] = useState(false);
@@ -29,12 +15,13 @@ export default function Register() {
     setIsPasswordShown(!isPaswordShown);
   };
 
-  const [data, setData] = useState({
-    name: "",
-    email: "",
-    username: "",
-    password: "",
-  });
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("admin");
+  const [msg, setMsg] = useState("");
+  const navigate = useNavigate();
 
   const errorData = {
     name: "",
@@ -46,119 +33,115 @@ export default function Register() {
   const RegexPassword = /(?=^.{8,}$)/;
   const [error, setError] = useState(errorData.password);
 
-  const _handleChangeInput = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-
-    if (name === "password") {
-      if (!RegexPassword.test(value)) {
-        setError("Must be at least 8 characters.");
-      } else {
-        setError("");
-      }
-    }
-    setData({
-      ...data,
-      [name]: value,
-    });
-  };
-
-  const [insertDataUser, {data: dataInsert}] = useMutation(insertDataUserByRegister)
-
-  const insertUser = (event) => {
-    if(data.name && data.email && data.username && data.password){
-      insertDataUser({
-        variables: {
-          id: uuidv4(),
-          name: data.name,
-          email: data.email,
-          username: data.username,
-          password: data.password,
-        }
-      })
-      if(error === "") {
-        alert("Registrasi berhasil")
-      } else{
-        alert("Registrasi gagal")
-      }
-
-      event.preventDefault();
-
-      console.log(data);
-      setData({
-        name: "",
-        email: "",
-        username: "",
-        password: "",
-      })
+  const _handleChangePassword = (e) => {
+    if (RegexPassword.test(password)) {
+      setError(errorData.password);
     } else {
-      alert("Email, name, password, and username not empty")
+      setError("Password must be at least 8 characters");
+    }
+    setPassword(e.target.value);
+  }
+
+  const _handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+      await Axios.post("http://localhost:3000/register", {
+        name: name,
+        email: email,
+        username: username,
+        password: password,
+        role: role,
+      })
+      navigate("/login")
+    } catch (error) {
+      if(error.response) {
+        setMsg(error.response.data.msg)
+      }   
     }
   }
 
+  const backgroundImage = {
+    backgroundImage: `url(${background})`,
+    backgroundSize: "100% 100%",
+  };
+
   return (
-    <RegisterWrap>
-      <RegisterImage></RegisterImage>
-      <RegisterInput onSubmit={() => insertUser()}>
+    <RegisterWrap style={backgroundImage}>
         <Logo />
+      <RegisterInput onSubmit={_handleRegister}>
+        <h1 className="text-2xl font-bold">REGISTER</h1>
         <h4 className="text-left">Create Your Account</h4>
+        <p className="has-text-centered">{msg}</p>
         <InputData
           type="text"
           name="name"
-          value={data.name}
+          value={name}
           placeholder="Name"
-          onChange={_handleChangeInput}
+          onChange={(e) => setName(e.target.value)}
         />
         <InputData
           type="email"
           name="email"
-          value={data.email}
+          value={email}
           placeholder="Email"
-          onChange={_handleChangeInput}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <InputData
           type="text"
           name="username"
-          value={data.username}
+          value={username}
           placeholder="Username"
-          onChange={_handleChangeInput}
+          onChange={(e) => setUsername(e.target.value)}
         />
         <div className="password">
           <InputData
             type={isPaswordShown ? "text" : "password"}
             name="password"
-            value={data.password}
+            value={password}
             placeholder="Password"
-            onChange={_handleChangeInput}
+            onChange={_handleChangePassword}
           />
           <button className="show-password" onClick={_handleClickPassword}>
             {isPaswordShown ? <AiFillEyeInvisible /> : <AiFillEye />}
           </button>
         </div>
         <span className="text-black">{error}</span>
-        <Button onClick={() => insertUser()}>Register</Button>
-        <h4>Have an account? <Link to="/login" className="font-bold">Login</Link></h4>
+        <Button onClick={_handleRegister}>Register</Button>
+        <h4>
+          Have an account?{" "}
+          <Link to="/login" className="font-bold text-primary-blue">
+            Login
+          </Link>
+        </h4>
       </RegisterInput>
     </RegisterWrap>
   );
 }
 
 const RegisterWrap = styled.div`
-  display: flex;
+  width: 100%;
+  height: 100vh;
   padding: 30px;
+  display: flex; 
+  flex-direction: column;
+  align-items: center;
 `;
-const RegisterImage = styled.div`
-  width: 50%;
-`;
+
 const RegisterInput = styled.div`
+  background-color: #fff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
-  row-gap: 20px;
-  width: 50%;
+  row-gap: 10px;
+  width: 40%;
   border: 1px solid black;
   border-radius: 10px;
   align-items: center;
   padding: 10px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 
   .password {
     display: flex;
