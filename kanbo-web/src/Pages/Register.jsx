@@ -95,6 +95,7 @@ export default function Register() {
         />
         <div className="password">
           <InputData
+            className='w-full border rounded h-12 px-4 -mr-8'
             type={isPaswordShown ? "text" : "password"}
             name="password"
             value={password}
@@ -145,9 +146,8 @@ const RegisterInput = styled.div`
 
   .password {
     display: flex;
-    column-gap: 10px;
     justify-content: center;
     width: 100%;
-    margin-left: 20px;
+    margin-left: -15px;
   }
 `;
